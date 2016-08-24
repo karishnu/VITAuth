@@ -1,0 +1,49 @@
+{
+  "name": "vitauth",
+  "version": "0.0.1",
+  "private": false,
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "dependencies": {
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "jade": "~1.11.0",
+    "morgan": "~1.7.0",
+    "serve-favicon": "~2.3.0",
+    "cheerio": "~0.20.0",
+    "request": "~2.74.0",
+    "unirest": "~0.5.0",
+    "tabletojson": "~0.4.0",
+    "ssl-root-cas": "~1.2.1"
+  },
+  "description": "Auth module using the VIT academics portal",
+  "main": "app.js",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2"
+  },
+  "author": "Karishnu Poddar <karishnu@gmail.com>",
+  "license": "ISC",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karishnu/VITAuth.git"
+  },
+  "keywords": [
+    "VIT",
+    "university",
+    "authentication",
+    "academics",
+    "student",
+    "login"
+  ],
+  "bugs": {
+    "url": "https://github.com/karishnu/VITAuth/issues"
+  },
+  "homepage": "https://github.com/karishnu/VITAuth#readme"
+}
