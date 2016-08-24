@@ -1,27 +1,18 @@
-var express = require('express');
-var router = express.Router();
 var fs = require('fs');
-var request = require('request');
 var cheerio = require('cheerio');
-var captcha = require("./captcha");
+var captchaHandler = require("./captcha/captchaHandler");
 var unirest = require('unirest');
-var tabletojson = require('tabletojson');
+var consts = require('./consts');
 
 function authenticate(regno, pass, callback){
-  console.log("Request Received!");
 
   var name;
-    var cookieJ = unirest.jar();
+  var cookieJ = unirest.jar();
 
-  const url_login_submit = 'https://vtop.vit.ac.in/student/stud_login_submit.asp';
-  const stud_login_home = 'https://vtop.vit.ac.in/student/stud_home.asp';
+  captchaHandler.parseCaptcha(function (captcha, captcha_cookie) {
+    cookieJ.add(unirest.cookie(captcha_cookie), consts.url_login_submit);
 
-  //var cookieJar = unirest.jar();
-
-  captcha.parseCaptcha(function (captcha, captcha_cookie) {
-    cookieJ.add(unirest.cookie(captcha_cookie), url_login_submit);
-
-    unirest.post(url_login_submit)
+    unirest.post(consts.url_login_submit)
         .jar(cookieJ)
         .form({
           regno: regno,
@@ -33,8 +24,7 @@ function authenticate(regno, pass, callback){
   });
 
   const onSubmitPost = function (response) {
-    console.log(response.body);
-    //console.log(response.getElementsByTagName('table'));
+
     var $ = cheerio.load(response.body);
     tables = $('table');
     table = $(tables[1]);
@@ -47,10 +37,8 @@ function authenticate(regno, pass, callback){
       name = name + " ";
       name = name + user_info_arr[k];
     }
-    console.log(name);
     regno = user_info_arr[user_info_arr.length-3];
-    console.log(regno);
-    unirest.get(stud_login_home)
+    unirest.get(consts.stud_login_home)
         .jar(cookieJ)
         .timeout(28000)
         .end(onSubmitHome);
