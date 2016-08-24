@@ -11,17 +11,18 @@ function authenticate(regno, pass, callback){
   console.log("Request Received!");
 
   var name;
+    var cookieJ = unirest.jar();
 
   const url_login_submit = 'https://vtop.vit.ac.in/student/stud_login_submit.asp';
   const stud_login_home = 'https://vtop.vit.ac.in/student/stud_home.asp';
 
-  var cookieJar = unirest.jar();
+  //var cookieJar = unirest.jar();
 
   captcha.parseCaptcha(function (captcha, captcha_cookie) {
-    cookieJar.add(unirest.cookie(captcha_cookie), url_login_submit);
+    cookieJ.add(unirest.cookie(captcha_cookie), url_login_submit);
 
     unirest.post(url_login_submit)
-        .jar(cookieJar)
+        .jar(cookieJ)
         .form({
           regno: regno,
           passwd: pass,
@@ -50,13 +51,13 @@ function authenticate(regno, pass, callback){
     regno = user_info_arr[user_info_arr.length-3];
     console.log(regno);
     unirest.get(stud_login_home)
-        .jar(cookieJar)
+        .jar(cookieJ)
         .timeout(28000)
         .end(onSubmitHome);
   };
 
   const onSubmitHome = function (response) {
-    callback("pass");
+    callback(name, regno, cookieJ);
   };
 }
 
