@@ -1,9 +1,9 @@
 {
   "name": "vitauth",
-  "version": "0.0.3",
+  "version": "0.1.1",
   "private": false,
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "node test/test.js"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
