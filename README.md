@@ -12,7 +12,7 @@ npm install vitauth
     
     var Auth = require('vitauth');
     
-    Auth.auth('sample_reg_no', 'sample_pass', function (name, regno, cookieJ) {
+    Auth.auth('sample_reg_no', 'sample_pass', function (name, regno, cookieJ, err) {
         unirest.get(sample_vtop_link)
             .jar(cookieJar)
             .timeout(28000)
