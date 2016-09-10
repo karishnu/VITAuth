@@ -25,6 +25,15 @@ function authenticate(regno, pass, callback) {
             .end(onSubmitPost);
     });
 
+    const onSubmitHome = function (response) {
+        if (response.body == null) {
+            callback(null, null, null, {code: '140', message: 'VIT Server Down'});
+        }
+        else {
+            callback(name, regno, cookieJ, null);
+        }
+    };
+
     const onSubmitPost = function (response) {
 
         if (response.body == null) {
@@ -45,6 +54,7 @@ function authenticate(regno, pass, callback) {
                 callback(null, null, null, {code: '130', message: 'Invalid Credentials'})
             }
             else {
+                //console.log("Valid creds");
                 table = $(tables[1]);
                 children = table.children();
                 child = $(children[0]);
@@ -62,16 +72,6 @@ function authenticate(regno, pass, callback) {
                     .end(onSubmitHome);
             }
         }
-        ;
-
-        const onSubmitHome = function (response) {
-            if (response.body == null) {
-                callback(null, null, null, {code: '140', message: 'VIT Server Down'});
-            }
-            else {
-                callback(name, regno, cookieJ, null);
-            }
-        };
     }
 }
 
