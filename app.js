@@ -29,6 +29,9 @@ function authenticate(regno, pass, callback) {
         if (response.body == null) {
             callback(null, null, null, {code: '140', message: 'VIT Server Down'});
         }
+        else if(response.request.uri.pathname=="/student/default_check_message.asp"){
+            callback(null, null, null, {code: '150', message: 'VIT Student Login Blocked'});
+        }
         else {
             callback(name, regno, cookieJ, null);
         }
