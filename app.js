@@ -6,14 +6,21 @@ var consts = require('./consts');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
+var regno_glob;
+var pass_glob;
+var callback_glob;
+
 function authenticate(regno, pass, callback) {
+
+    regno_glob = regno;
+    pass_glob = pass;
+    callback_glob = callback;
 
     var name;
     var cookieJ = unirest.jar();
 
     captchaHandler.parseCaptcha(function (captcha, captcha_cookie) {
         cookieJ.add(unirest.cookie(captcha_cookie), consts.url_login_submit);
-
         unirest.post(consts.url_login_submit)
             .jar(cookieJ)
             .form({
@@ -47,14 +54,20 @@ function authenticate(regno, pass, callback) {
             //console.log(response.body);
 
             var $ = cheerio.load(response.body);
+            //console.log(response.body);
             tables = $('table');
             table = $(tables[2]);
-
             tr = $(table).children()['0'];
             tr_children = $(tr).children();
 
             if ($($(tr_children['0']).children()['4'])['0'] && $($(tr_children['0']).children()['4'])['0'].attribs.name == "stud_login") {
-                callback(null, null, null, {code: '130', message: 'Invalid Credentials'})
+                if($('input')['0'].attribs.value=='Verification Code does not match.  Enter exactly as shown.'){
+                    console.log("Captcha Error! Retrying!");
+                    authenticate(regno_glob, pass_glob, callback_glob);
+                }
+                else{
+                    callback(null, null, null, {code: '130', message: 'Invalid Credentials'});
+                }
             }
             else {
                 //console.log("Valid creds");
