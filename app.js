@@ -51,8 +51,6 @@ function authenticate(regno, pass, callback) {
         }
         else {
 
-            //console.log(response.body);
-
             var $ = cheerio.load(response.body);
             //console.log(response.body);
             tables = $('table');
@@ -70,7 +68,6 @@ function authenticate(regno, pass, callback) {
                 }
             }
             else {
-                //console.log("Valid creds");
                 table = $(tables[1]);
                 children = table.children();
                 child = $(children[0]);

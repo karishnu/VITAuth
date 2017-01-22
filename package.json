@@ -1,6 +1,6 @@
 {
   "name": "vitauth",
-  "version": "0.9.5",
+  "version": "1.0.0",
   "private": false,
   "scripts": {
     "test": "node test/test.js"

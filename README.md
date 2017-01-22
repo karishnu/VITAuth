@@ -13,11 +13,21 @@ npm install vitauth
     var Auth = require('vitauth');
     
     Auth.auth('sample_reg_no', 'sample_pass', function (name, regno, cookieJ, err) {
+
+        //name is the name of the student, regno is the student registration number,
+        //cookieJ is the cookiejar that has to be used with future requests.
+        //Optional
         unirest.get(sample_vtop_link)
             .jar(cookieJ)
             .timeout(28000)
             .end(sample_function);
     });
+
+#Features
+
+    * Stable with appropriate err messages
+    * Checks for student login blocked due to feedback
+    * No invalid captcha error, 100% success rate.
     
 #Credits
 
