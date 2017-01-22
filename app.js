@@ -50,16 +50,11 @@ function authenticate(regno, pass, callback) {
             callback(null, null, null, {code: '140', message: 'VIT Server Down'});
         }
         else {
+            var $ = cheerio.load(response.body, {ignoreWhitespace: true});
+            var hidden_object = $('input[type="hidden"]')['0'];
 
-            var $ = cheerio.load(response.body);
-            //console.log(response.body);
-            tables = $('table');
-            table = $(tables[2]);
-            tr = $(table).children()['0'];
-            tr_children = $(tr).children();
-
-            if ($($(tr_children['0']).children()['4'])['0'] && $($(tr_children['0']).children()['4'])['0'].attribs.name == "stud_login") {
-                if($('input')['0'].attribs.value=='Verification Code does not match.  Enter exactly as shown.'){
+            if (hidden_object) {
+                if(hidden_object.attribs.value=='Verification Code does not match.  Enter exactly as shown.'){
                     console.log("Captcha Error! Retrying!");
                     authenticate(regno_glob, pass_glob, callback_glob);
                 }
@@ -68,12 +63,9 @@ function authenticate(regno, pass, callback) {
                 }
             }
             else {
-                table = $(tables[1]);
-                children = table.children();
-                child = $(children[0]);
-                user_info_string = child.text().trim();
-                user_info_arr = user_info_string.split(' ');
-                name = user_info_arr[1].trim();
+                var user_info_string = $('font[size=2]')['0'].children[0].data.trim();
+                var user_info_arr = user_info_string.split(' ');
+                name = user_info_arr[1];
                 for (var k = 2; k <= user_info_arr.length - 5; k++) {
                     name = name + " ";
                     name = name + user_info_arr[k];
