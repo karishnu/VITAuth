@@ -2,7 +2,7 @@ var captchaParser = require("./CaptchaParser");
 var unirest = require('unirest');
 var consts = require('../consts');
 
-function parseCaptcha(callback) {
+function parseCaptcha(url_captcha, callback) {
 
     const onCaptchaRequest = function (response) {
 
@@ -24,7 +24,7 @@ function parseCaptcha(callback) {
         }
     };
 
-    unirest.get(consts.captcha_link)
+    unirest.get(url_captcha)
         .encoding(null)
         .timeout(26000)
         .end(onCaptchaRequest);
