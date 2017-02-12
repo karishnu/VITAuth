@@ -1,18 +1,22 @@
 # VITAuth
 
-VITAuth is an authentication module that uses the VIT University Student Login for authentication (vtop.vit.ac.in). 
+VITAuth is an authentication module that uses the VIT University Student/Parent Login for authentication (vtop.vit.ac.in). 
 It is aimed at simplifying scraping and login tasks. 
 Takes care of the captcha and returns a cookieJar with the authenticated cookie.
 
-#Download
+# Download
 
+```
 npm install vitauth
+```
 
-#Usage
-    
+# Usage
+
+```    
     var Auth = require('vitauth');
     
-    Auth.auth('sample_reg_no', 'sample_pass', function (name, regno, cookieJ, err) {
+    //Student Login
+    Auth.studentAuth('sample_reg_no', 'sample_pass', function (name, regno, cookieJ, err) {
 
         //name is the name of the student, regno is the student registration number,
         //cookieJ is the cookiejar that has to be used with future requests.
@@ -23,18 +27,26 @@ npm install vitauth
             .end(sample_function);
     });
 
-#Features
+    //Parent Login
+    Auth.parentAuth('sample_reg_no', 'sample_dob', 'sample_mobile', function (name, regno, cookieJ, err) {
 
-    * Stable with appropriate err messages
-    * Checks for student login blocked due to feedback
-    * No invalid captcha error, 100% success rate.
+        //name is the name of the student, regno is the student registration number,
+        //cookieJ is the cookiejar that has to be used with future requests.
+    });
+```
+
+# Features
+
+* Stable with appropriate err messages
+* Checks for student login blocked due to feedback
+* No invalid captcha error, 100% success rate.
     
-#Credits
+# Credits
 
 Karthik Balakrishnan - Captcha parser without which this would have been impossible.
 https://github.com/karthikb351/CaptchaParser
 
-#License
+# License
 
    Copyright 2016 Karishnu Poddar
 

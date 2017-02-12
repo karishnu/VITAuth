@@ -611,7 +611,6 @@ var sort = function (sorter, captcha) {
 };
 
 module.exports.getPixelMapFromBuffer = function(bitmapBuffer) {
-    console.log(bitmapBuffer);
     var pixelMap = [];
     var subArray = [];
     var row = 0;

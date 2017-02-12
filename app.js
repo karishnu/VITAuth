@@ -19,7 +19,7 @@ function authenticateStudent(regno, pass, callback) {
         captcha: consts.url_student_captcha_link
     };    
 
-    authenticate(data, url, callback);
+    authenticate(data, url, callback, 0);
 }
 
 function authenticateParent(regno, dob, mobile, callback){
@@ -35,10 +35,15 @@ function authenticateParent(regno, dob, mobile, callback){
         captcha: consts.url_parent_captcha_link
     };
 
-    authenticate(data, url, callback);
+    authenticate(data, url, callback, 0);
 }
 
-function authenticate(data, url_login, callback) {
+function authenticate(data, url_login, callback, no_tries) {
+    if(no_tries >= 10)
+        return callback(null, null, null, {
+            code: '160',
+            message: 'No of Tries exceedeed'
+        })
 
     var name;
     var cookieJ = unirest.jar();
@@ -46,7 +51,6 @@ function authenticate(data, url_login, callback) {
     captchaHandler.parseCaptcha(url_login.captcha, function (captcha, captcha_cookie) {
         cookieJ.add(unirest.cookie(captcha_cookie), url_login.submit);
         data.vrfcd = captcha;
-        console.log(data);
         unirest.post(url_login.submit)
             .jar(cookieJ)
             .form(data)
@@ -85,21 +89,23 @@ function authenticate(data, url_login, callback) {
 
             if (hidden_object) {
                 if (hidden_object.attribs.value == 'Verification Code does not match.  Enter exactly as shown.' || 'Enter Verification Code of 6 characters exactly as shown.' == hidden_object.attribs.value) {
-                    console.log("Captcha Error! Retrying!");
-                    authenticate(data, url_login, callback);
-                } else {
-                    console.log(hidden_object.attribs.value);
-                    
+                    authenticate(data, url_login, callback, no_tries + 1);
+                }
+                else if(hidden_object.attribs.value == 'Your ward account is locked.'){
+                    callback(null, null, null, {
+                        code: '170',
+                        message: 'Account Locked'
+                    });
+                } 
+                else {                    
                     callback(null, null, null, {
                         code: '130',
                         message: 'Invalid Credentials'
                     });
                 }
             } else {
-                console.log("hello");
                 var user_info_string = $('font[size=2]')['0'].children[0].data.trim();
                 var user_info_arr = user_info_string.split(' ');
-                console.log(user_info_arr);
                 if(url_login.submit == consts.url_student_login_submit){
                 name = user_info_arr[1];
                 for (var k = 2; k <= user_info_arr.length - 5; k++) {

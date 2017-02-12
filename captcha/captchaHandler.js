@@ -18,7 +18,6 @@ function parseCaptcha(url_captcha, callback) {
 
             const key = Object.keys(response.cookies)[0];
             const cookieSerial = key + "=" + response.cookies[key];
-            console.log(cookieSerial);
 
             return callback(captchaParser.getCaptcha(pixelmap), cookieSerial);
         }
